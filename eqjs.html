@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Earthquake!!!</h1>
+<p>The Richter scale is a way to quantify the magnitude of an earthquake using a base-10 logarithmic scale. The magnitude is defined as the logarithm of the ratio of the amplitude of waves measured by a seismograph to an arbitrarily small amplitude. An earthquake that measures 5.0 on the Richter scale has a shaking amplitude 10 times larger than one that measures 4.0, and corresponds to a 31.6 times larger release of energy. [Rephrased from Wikipedia]</p>
+
+<p>The energy in joules released for a particular Richter scale measurement is given by:</br>Energy = 10^((1.5*richter)+4.8)</br>where Energy is measured in joules and richter is the Richter scale measurement (typically on a scale from 1-10 as a floating point number). One ton of exploded TNT yields 4.184x10^9 joules. Thus, you can relate the energy released in joules to tons of exploded TNT. You can use the website <a href="http://www.convertalot.com/earthquake_power__calculator.html">http://www.convertalot.com/earthquake_power__calculator.html</a> to check my work.</p>
+
+<p>Here are some famous earthquakes:
+<ul>
+<li/>9.1 (Indonesia earthquake, 2004)
+<li/>9.2 (Alaska earthquake, 1964)
+<li/>9.5 (Chile earthquake, 1960; largest ever measured)
+</ul>
+</p>
+
+<p>This program will perform the appropriate calculations and display the equivalent amount of energy in joules and in tons of exploded TNT.  Please input a number between 1 and 10:</p>
+
+<input id="numb">
+
+<button type="button" onclick="myFunction()">Submit</button>
+
+<p id="earthquake"></p>
+
+<script>
+function myFunction() {
+    var x, text;
+
+    // Get the value of the input field with id="numb"
+    x = document.getElementById("numb").value;
+
+	j = Math.pow(10,((x * 1.5) + 4.8))
+	t = j / (4.184e9);
+    text = "Energy is "+j+" joules or "+t+" tons of TNT";
+    document.getElementById("earthquake").innerHTML = text;
+}
+</script>
+
+</body>
+</html> 

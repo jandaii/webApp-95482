@@ -12,8 +12,10 @@ if (!$mysqli)
 //$sql = "INSERT INTO userinfo VALUES ('username', 'useremail', 'password')";
 
 if ($mysqli->query($sql) === TRUE) {
-    echo "Inserted successfully";
+    header("Location:single-post.php");
+        exit();
 } else {
     echo "Error: ".$sql."<br>".$mysqli->error;
 }
+
 ?>

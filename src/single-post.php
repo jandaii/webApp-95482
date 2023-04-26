@@ -295,28 +295,50 @@
 
                         <ol>
                             <!-- Single Comment Area -->
-                            <li class="single_comment_area">
-                                <div class="comment-wrapper d-md-flex align-items-start">
-                                    <!-- Comment Meta -->
-                                    <div class="comment-author">
-                                        <img src="img/blog-img/25.jpg" alt="">
-                                    </div>
+                            
+                                
+                                    
                                     <!-- Comment Content -->
-                                    <div class="comment-content">
-                                        <h5>John Doe</h5>
-                                        <span class="comment-date font-pt">December 18, 2017</span>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum nunc libero, vitae rutrum nunc porta id. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam arcu augue, semper at elementum nec, cursus nec ante.</p>
-                                        <a class="reply-btn" href="#">Reply <i class="fa fa-reply" aria-hidden="true"></i></a>
-                                    </div>
-                                </div>
-                                <ol class="children">
+                                    
+                                        <!-- <h5>John</h5>
+                                        <span class="comment-date font-pt">December 18, 2017</span> -->
+                                        <!-- <p> -->
+                                            <?php $mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
+                                        $mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
+                                        if (!$mysqli) 
+                                        {die("could not connect to the database:n" . $mysqli->connect_error);} 
+                                        $selectSql = "SELECT * FROM commentInfo ";
+                                        $result = $mysqli->query($selectSql);
+                                        if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            while($row = $result->fetch_assoc()) {
+                                                echo '<li class="single_comment_area">';
+                                                echo '<div class="comment-wrapper d-md-flex align-items-start">';
+                                                echo '<div class="comment-author">';
+                                                echo  '<img src="img/blog-img/25.jpg" alt="">';
+                                                echo    '</div>';
+                                                echo '<div class="comment-content">';
+                                                echo '<h5>'.$row["userName"].'</h5>';
+                                                echo '<span class="comment-date font-pt"> '.$row['commentTime'].'</span>';
+                                                echo '<p>'.$row["commentContent"].'</p>';
+                                                echo '</div>';
+                                                echo '</div>';
+                                              //echo "id: " . $row["userId"]. " - Name: " . $row["userName"]. " " . $row["email"]. "<br>";
+                                            }
+                                          } else {
+                                            echo "0 results";
+                                          }
+                                        ?>
+                                        <!-- </p> -->
+                                        <!-- <a class="reply-btn" href="#">Reply <i class="fa fa-reply" aria-hidden="true"></i></a> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                                <!-- <ol class="children">
                                     <li class="single_comment_area">
                                         <div class="comment-wrapper d-md-flex align-items-start">
-                                            <!-- Comment Meta -->
                                             <div class="comment-author">
                                                 <img src="img/blog-img/25.jpg" alt="">
                                             </div>
-                                            <!-- Comment Content -->
                                             <div class="comment-content">
                                                 <h5>John Doe</h5>
                                                 <span class="comment-date text-muted">December 18, 2017</span>
@@ -325,7 +347,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                </ol>
+                                </ol> -->
                             </li>
                         </ol>
                     </div>

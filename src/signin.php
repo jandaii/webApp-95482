@@ -17,8 +17,14 @@ $result = $mysqli->query($sql);
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        header("Location:index.html");
+      session_start();
+
+      $_SESSION['userId'] = $row['userName'];
+      header("Location:index.php");
         exit();    }
   } else {
     echo '<script>alert("Your password might be fault")</script>';
-  }?>
+  }
+  
+  
+  ?>

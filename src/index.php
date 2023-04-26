@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -151,7 +152,7 @@
                     <!-- Logo Area -->
                     <div class="col-12 col-md-4">
                         <div class="logo-area">
-                            <a href="index.html"><img src="img/core-img/logo.png" alt="logo"></a>
+                            <a href="index.php"><img src="img/core-img/logo.png" alt="logo"></a>
                         </div>
                     </div>
                     <!-- Header Advert Area -->
@@ -187,7 +188,11 @@
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="signin.html">Login</a>
+                                            <a class="nav-link" href="signin.html"><?php if (isset($_SESSION["userId"])) {
+                                                echo ''.$_SESSION["userId"];
+                                            } else {
+                                                echo 'LOGIN';
+                                            }?></a>
                                         </li>
                                     </ul>
                                     <!-- Search Form -->
@@ -300,7 +305,7 @@
                     <div class="gazette-welcome-post">
                         <!-- Post Tag -->
                         
-                        <?php
+                        <?php 
                          $mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
                          $mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
                          if (!$mysqli) 
@@ -319,22 +324,19 @@
                             echo '</div>';
                             echo '<div class="post-continue-reading-share d-sm-flex align-items-center justify-content-between mt-30">';
                             echo '<div class="post-continue-btn">';
-                            echo '<a href="single-post.php" class="font-pt">Continue Reading <i class="fa fa-chevron-right" aria-hidden="true"></i></a>';
+                            if (isset($_SESSION['userId'])) {
+                                $output = "location.href=single-post.php?id=".$row["newsId"];
+                                $url = "single-post.php?id=".$row['newsId'];
+                            } else {
+                                $output = "alert('Please login first!')";
+                                $url = "#";
+                            }
+                            echo '<a href = "'.$url.'" onclick = "'.$output.'" class="font-pt">Continue Reading <i class="fa fa-chevron-right" aria-hidden="true"></i></a>';
                             echo '</div>';
                             echo '</div>';
 
                          }
                         ?>
-                        <!-- <h2 class="font-pt">What's behind the world obsession with gems?</h2> -->
-                        <!-- <p class="gazette-post-date">March 29, 2016</p> -->
-                        <!-- Post Thumbnail -->
-                        
-                            <!-- <img src="img/blog-img/1.jpg" alt="post-thumb"> -->
-                        <!-- Post Excerpt -->
-                        <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis. Aliquam finibus nulla quam, a iaculis justo finibus non. Suspendisse in fermentum nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend.</p> -->
-                        <!-- Reading More -->
-                        
-                            
                                 
                             
                     </div>

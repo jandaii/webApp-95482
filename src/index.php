@@ -186,21 +186,6 @@
                                                 <a class="dropdown-item" href="contact.html">Contact</a>
                                             </div>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" href="#">Politics</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Lifestyle</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Travel</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Health</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Entertainment</a>
-                                        </li> -->
                                         <li class="nav-item">
                                             <a class="nav-link" href="signin.html">Login</a>
                                         </li>
@@ -314,29 +299,44 @@
                     <!-- Gazette Welcome Post -->
                     <div class="gazette-welcome-post">
                         <!-- Post Tag -->
-                        <div class="gazette-post-tag">
-                            <a href="#">Politices</a>
-                        </div>
-                        <h2 class="font-pt">What's behind the world obsession with gems?</h2>
-                        <p class="gazette-post-date">March 29, 2016</p>
+                        
+                        <?php
+                         $mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
+                         $mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
+                         if (!$mysqli) 
+                         {die("could not connect to the database:n" . $mysqli->connect_error);} 
+                         $selectSql = "SELECT * FROM newsinfo ORDER BY newsTime DESC LIMIT 1 ";
+                         $result = $mysqli->query($selectSql);
+                         if ($result->num_rows > 0) {
+                            $row = $result ->fetch_assoc();
+                            echo '<div class="gazette-post-tag">';
+                            echo '<a href="#">'.$row["tag"].'</a>';
+                            echo '</div>';
+                            echo '<h2 class = "font-pt">'.$row["newsTitle"].'</h2>';
+                            echo '<p class="gazette-post-date">'.$row['newsTime'].'</p>';
+                            echo '<div class="blog-post-thumbnail my-5">';
+                            echo ' <img src="'.$row["newsPic"].'" alt="post-thumb">';
+                            echo '</div>';
+                            echo '<div class="post-continue-reading-share d-sm-flex align-items-center justify-content-between mt-30">';
+                            echo '<div class="post-continue-btn">';
+                            echo '<a href="single-post.php" class="font-pt">Continue Reading <i class="fa fa-chevron-right" aria-hidden="true"></i></a>';
+                            echo '</div>';
+                            echo '</div>';
+
+                         }
+                        ?>
+                        <!-- <h2 class="font-pt">What's behind the world obsession with gems?</h2> -->
+                        <!-- <p class="gazette-post-date">March 29, 2016</p> -->
                         <!-- Post Thumbnail -->
-                        <div class="blog-post-thumbnail my-5">
-                            <img src="img/blog-img/1.jpg" alt="post-thumb">
-                        </div>
+                        
+                            <!-- <img src="img/blog-img/1.jpg" alt="post-thumb"> -->
                         <!-- Post Excerpt -->
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis. Aliquam finibus nulla quam, a iaculis justo finibus non. Suspendisse in fermentum nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend.</p>
+                        <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis. Aliquam finibus nulla quam, a iaculis justo finibus non. Suspendisse in fermentum nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend.</p> -->
                         <!-- Reading More -->
-                        <div class="post-continue-reading-share d-sm-flex align-items-center justify-content-between mt-30">
-                            <div class="post-continue-btn">
-                                <a href="#" class="font-pt">Continue Reading <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-                            </div>
-                            <div class="post-share-btn-group">
-                                <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                            </div>
-                        </div>
+                        
+                            
+                                
+                            
                     </div>
 
                     <div class="gazette-todays-post section_padding_100_50">

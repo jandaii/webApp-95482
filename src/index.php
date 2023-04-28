@@ -177,22 +177,19 @@
                                         <li class="nav-item active">
                                             <a class="nav-link" href="#">Today <span class="sr-only">(current)</span></a>
                                         </li>
+
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
-                                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <a class="dropdown-item" href="index.html">Home</a>
-                                                <a class="dropdown-item" href="catagory.html">Catagory</a>
-                                                <a class="dropdown-item" href="single-post.html">Single Post</a>
-                                                <a class="dropdown-item" href="about-us.html">About Us</a>
-                                                <a class="dropdown-item" href="contact.html">Contact</a>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
                                             <a class="nav-link" href="signin.html"><?php if (isset($_SESSION["userId"])) {
                                                 echo ''.$_SESSION["userId"];
                                             } else {
                                                 echo 'LOGIN';
                                             }?></a>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Set</a>
+                                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <a class="dropdown-item" href="signout.php" onclick = "signout.php">Sign out</a>
+                                            </div>
                                         </li>
                                     </ul>
                                     <!-- Search Form -->
@@ -261,13 +258,18 @@
                          $result = $mysqli->query($selectSql);
                          if ($result->num_rows > 0) {
                             $row = $result ->fetch_assoc();
+                            if ($row['newsPic']) {
+                                $pic = $row['newsPic'];
+                            } else {
+                                $pic = "img/blog-img/2.jpg";
+                            }
                             echo '<div class="gazette-post-tag">';
                             echo '<a href="#">'.$row["tag"].'</a>';
                             echo '</div>';
                             echo '<h2 class = "font-pt">'.$row["newsTitle"].'</h2>';
                             echo '<p class="gazette-post-date">'.$row['newsTime'].'</p>';
                             echo '<div class="blog-post-thumbnail my-5">';
-                            echo ' <img src="'.$row["newsPic"].'" alt="post-thumb">';
+                            echo ' <img src="'.$pic.'" alt="post-thumb">';
                             echo '</div>';
                             echo '<div class="post-continue-reading-share d-sm-flex align-items-center justify-content-between mt-30">';
                             echo '<div class="post-continue-btn">';
@@ -290,131 +292,56 @@
 
                     <div class="gazette-todays-post section_padding_100_50">
                         <div class="gazette-heading">
-                            <h4>today’s most popular</h4>
+                            <h4>Popular News</h4>
                         </div>
-                        <!-- Single Today Post -->
-                        <div class="gazette-single-todays-post d-md-flex align-items-start mb-50">
-                            <div class="todays-post-thumb">
-                                <img src="img/blog-img/2.jpg" alt="">
-                            </div>
-                            <div class="todays-post-content">
-                                <!-- Post Tag -->
-                                <div class="gazette-post-tag">
-                                    <a href="#">News</a>
-                                </div>
-                                <h3><a href="#" class="font-pt mb-2">$250-million mansion is most expensive</a></h3>
-                                <span class="gazette-post-date mb-2">March 29, 2016</span>
-                                <a href="#" class="post-total-comments">3 Comments</a>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere.</p>
-                            </div>
-                        </div>
-                        <!-- Single Today Post -->
-                        <div class="gazette-single-todays-post d-md-flex align-items-start mb-50">
-                            <div class="todays-post-thumb">
-                                <img src="img/blog-img/3.jpg" alt="">
-                            </div>
-                            <div class="todays-post-content">
-                                <!-- Post Tag -->
-                                <div class="gazette-post-tag">
-                                    <a href="#">Life</a>
-                                </div>
-                                <h3><a href="#" class="font-pt mb-2">Homeless man steals $350,000 </a></h3>
-                                <p class="gazette-post-date mb-2">March 29, 2016</p>
-                                <a href="#" class="post-total-comments">3 Comments</a>
-                                <p>Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis. Aliquam finibus nulla quam, a iaculis justo finibus non. Suspendisse in fermentum nunc.</p>
-                            </div>
-                        </div>
+                        <?php 
+                        $selectSql = "SELECT * FROM newsinfo ORDER BY newsTime DESC LIMIT 4 ";
+                        $result = $mysqli->query($selectSql);
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                if (isset($_SESSION['userId'])) {
+                                    $output = "location.href=single-post.php?id=".$row["newsId"];
+                                    $url = "single-post.php?id=".$row['newsId'];
+                                } else {
+                                    $output = "alert('Please login first!')";
+                                    $url = "#";
+                                }
+                                if ($row['newsPic']) {
+                                    $pic = $row['newsPic'];
+                                } else {
+                                    $pic = "img/blog-img/2.jpg";
+                                }
+                                $newsId = $row["newsId"];
+                                $sql22 = "SELECT count(distinct commentContent) as count from commentinfo where newsId = "."'$newsId'";
+                                $resultcomment = $mysqli->query($sql22);
+                                $resultrow = $resultcomment->fetch_assoc();
+                                $num = $resultrow["count"];
+                                $str = $row["newsMessage"];
+                                $arrays = explode('</p>',$str);
+                                echo '<div class="gazette-single-todays-post d-md-flex align-items-start mb-50">';
+                                echo '<div class="todays-post-thumb">';
+                                echo '<img src="'.$pic.'" alt="">';
+                                echo "</div>";
+                                echo '<div class="todays-post-content">';
+                                echo '<div class="gazette-post-tag">';
+                                echo "<a href='#'>News</a>";
+                                echo "</div>";
+                                echo '<h3><a href="'.$url.'" class="font-pt mb-2">'.$row["newsTitle"].'</a></h3>';
+                                echo ' <span class="gazette-post-date mb-2">'.$row["newsTime"].'</span>';
+                                echo '<a href="'.$url.'" class="post-total-comments">'.$num.' Comments</a>';
+                                echo ''.$arrays[0];
+                                echo '</div>';
+                                echo '</div>';
+                            }
+                        }
+                        else  {
+                            echo "Sorry! there is nothing you searched.";
+                        }
+                        ?>
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-3 col-md-6">
-                    <div class="sidebar-area">
-                        <!-- Breaking News Widget -->
-                        <div class="breaking-news-widget">
-                            <div class="widget-title">
-                                <h5>breaking news</h5>
-                            </div>
-                            <!-- Single Breaking News Widget -->
-                            <div class="single-breaking-news-widget">
-                                <img src="img/blog-img/bn-1.jpg" alt="">
-                                <div class="breakingnews-title">
-                                    <p>breaking news</p>
-                                </div>
-                                <div class="breaking-news-heading gradient-background-overlay">
-                                    <h5 class="font-pt">China leads new global skyscraper record</h5>
-                                </div>
-                            </div>
-                            <!-- Single Breaking News Widget -->
-                            <div class="single-breaking-news-widget">
-                                <img src="img/blog-img/bn-2.jpg" alt="">
-                                <div class="breakingnews-title">
-                                    <p>breaking news</p>
-                                </div>
-                                <div class="breaking-news-heading gradient-background-overlay">
-                                    <h5 class="font-pt">Can a zebra crossing change its stripes?</h5>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Don't Miss Widget -->
-                        <div class="donnot-miss-widget">
-                            <div class="widget-title">
-                                <h5>Don't miss</h5>
-                            </div>
-                            <!-- Single Don't Miss Post -->
-                            <div class="single-dont-miss-post d-flex mb-30">
-                                <div class="dont-miss-post-thumb">
-                                    <img src="img/blog-img/dm-1.jpg" alt="">
-                                </div>
-                                <div class="dont-miss-post-content">
-                                    <a href="#" class="font-pt">EU council reunites</a>
-                                    <span>Nov 29, 2017</span>
-                                </div>
-                            </div>
-                            <!-- Single Don't Miss Post -->
-                            <div class="single-dont-miss-post d-flex mb-30">
-                                <div class="dont-miss-post-thumb">
-                                    <img src="img/blog-img/dm-2.jpg" alt="">
-                                </div>
-                                <div class="dont-miss-post-content">
-                                    <a href="#" class="font-pt">A new way to travel the world</a>
-                                    <span>March 29, 2016</span>
-                                </div>
-                            </div>
-                            <!-- Single Don't Miss Post -->
-                            <div class="single-dont-miss-post d-flex mb-30">
-                                <div class="dont-miss-post-thumb">
-                                    <img src="img/blog-img/dm-3.jpg" alt="">
-                                </div>
-                                <div class="dont-miss-post-content">
-                                    <a href="#" class="font-pt">Why choose a bank?</a>
-                                    <span>March 29, 2016</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Advert Widget -->
-                        <div class="advert-widget">
-                            <div class="widget-title">
-                                <h5>Advert</h5>
-                            </div>
-                            <div class="advert-thumb mb-30">
-                                <a href="#"><img src="img/bg-img/add.png" alt=""></a>
-                            </div>
-                        </div>
-                        <!-- Subscribe Widget -->
-                        <div class="subscribe-widget">
-                            <div class="widget-title">
-                                <h5>subscribe</h5>
-                            </div>
-                            <div class="subscribe-form">
-                                <form action="#">
-                                    <input type="email" name="email" id="subs_email" placeholder="Your Email">
-                                    <button type="submit">subscribe</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <!-- Main Content Area End -->

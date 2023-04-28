@@ -251,7 +251,6 @@
                               $sqltag = "SELECT DISTINCT tag FROM commentInfo WHERE newsId = ".$id;
                               $tagResult = $mysqli->query($sqltag);
                               if ($tagResult->num_rows>0) {
-                               
                                 while ($rowNow = $tagResult->fetch_assoc()) {
                                     if (!empty($rowNow['tag'])){
                                         echo '<div class="gazette-post-tag">';
@@ -320,6 +319,9 @@
                                         if ($result->num_rows > 0) {
                                             // output data of each row
                                             while($row = $result->fetch_assoc()) {
+                                                if (!$row["commentContent"]) {
+                                                    continue;
+                                                }
                                                 echo '<li class="single_comment_area">';
                                                 echo '<div class="comment-wrapper d-md-flex align-items-start">';
                                                 echo '<div class="comment-author">';

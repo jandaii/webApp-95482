@@ -1,5 +1,15 @@
-<?php session_start(); ?>
-<!DOCTYPE html>
+<?php
+session_start();
+$mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
+$search = $_REQUEST['search'];
+$mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
+if (!$mysqli) 
+{die("could not connect to the database:n" . $mysqli->connect_error);}
+
+$sql = "SELECT * FROM newsInfo WHERE newsTitle like "."'%$search%'"." or newsMessage like "."'%$search%'"."";
+//$sql = "INSERT INTO userinfo VALUES ('username', 'useremail', 'password')";
+$result = $mysqli->query($sql);
+  ?><!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -218,29 +228,6 @@
     <!-- Header Area End -->
 
 
-    <!-- Welcome Blog Slide Area End -->
-
-    <!-- Latest News Marquee Area Start -->
-    <div class="latest-news-marquee-area">
-        <div class="simple-marquee-container">
-            <div class="marquee">
-                <ul class="marquee-content-items">
-                    <li>
-                        <a href="#"><span class="latest-news-time">10:40</span> The Facebook Live stream that could presage TV</a>
-                    </li>
-                    <li>
-                        <a href="#"><span class="latest-news-time">11:02</span> Opinion: It's time to start talking about impeachment</a>
-                    </li>
-                    <li>
-                        <a href="#"><span class="latest-news-time">12:37</span> Clinton aims to shore up Wisconsin with new TV ads</a>
-                    </li>
-                    <li>
-                        <a href="#"><span class="latest-news-time">13:59</span> Trump signs tax bill before leaving for Mar-a-Lago</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div><div class="tlinks">Collect from <a href="http://www.mobancss.com/" >网页模板</a></div>
     <!-- Latest News Marquee Area End -->
 
     <!-- Main Content Area Start -->
@@ -248,171 +235,54 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 col-lg-9">
-                    <!-- Gazette Welcome Post -->
-                    <div class="gazette-welcome-post">
-                        <!-- Post Tag -->
-                        
-                        <?php 
-                         $mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
-                         $mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
-                         if (!$mysqli) 
-                         {die("could not connect to the database:n" . $mysqli->connect_error);} 
-                         $selectSql = "SELECT * FROM newsinfo ORDER BY newsTime DESC LIMIT 1 ";
-                         $result = $mysqli->query($selectSql);
-                         if ($result->num_rows > 0) {
-                            $row = $result ->fetch_assoc();
-                            echo '<div class="gazette-post-tag">';
-                            echo '<a href="#">'.$row["tag"].'</a>';
-                            echo '</div>';
-                            echo '<h2 class = "font-pt">'.$row["newsTitle"].'</h2>';
-                            echo '<p class="gazette-post-date">'.$row['newsTime'].'</p>';
-                            echo '<div class="blog-post-thumbnail my-5">';
-                            echo ' <img src="'.$row["newsPic"].'" alt="post-thumb">';
-                            echo '</div>';
-                            echo '<div class="post-continue-reading-share d-sm-flex align-items-center justify-content-between mt-30">';
-                            echo '<div class="post-continue-btn">';
-                            if (isset($_SESSION['userId'])) {
-                                $output = "location.href=single-post.php?id=".$row["newsId"];
-                                $url = "single-post.php?id=".$row['newsId'];
-                            } else {
-                                $output = "alert('Please login first!')";
-                                $url = "#";
-                            }
-                            echo '<a href = "'.$url.'" onclick = "'.$output.'" class="font-pt">Continue Reading <i class="fa fa-chevron-right" aria-hidden="true"></i></a>';
-                            echo '</div>';
-                            echo '</div>';
 
-                         }
-                        ?>
-                                
-                            
-                    </div>
 
                     <div class="gazette-todays-post section_padding_100_50">
                         <div class="gazette-heading">
-                            <h4>today’s most popular</h4>
+                            <h4>Related Results</h4>
                         </div>
-                        <!-- Single Today Post -->
-                        <div class="gazette-single-todays-post d-md-flex align-items-start mb-50">
-                            <div class="todays-post-thumb">
-                                <img src="img/blog-img/2.jpg" alt="">
-                            </div>
-                            <div class="todays-post-content">
-                                <!-- Post Tag -->
-                                <div class="gazette-post-tag">
-                                    <a href="#">News</a>
-                                </div>
-                                <h3><a href="#" class="font-pt mb-2">$250-million mansion is most expensive</a></h3>
-                                <span class="gazette-post-date mb-2">March 29, 2016</span>
-                                <a href="#" class="post-total-comments">3 Comments</a>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere.</p>
-                            </div>
-                        </div>
-                        <!-- Single Today Post -->
-                        <div class="gazette-single-todays-post d-md-flex align-items-start mb-50">
-                            <div class="todays-post-thumb">
-                                <img src="img/blog-img/3.jpg" alt="">
-                            </div>
-                            <div class="todays-post-content">
-                                <!-- Post Tag -->
-                                <div class="gazette-post-tag">
-                                    <a href="#">Life</a>
-                                </div>
-                                <h3><a href="#" class="font-pt mb-2">Homeless man steals $350,000 </a></h3>
-                                <p class="gazette-post-date mb-2">March 29, 2016</p>
-                                <a href="#" class="post-total-comments">3 Comments</a>
-                                <p>Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis. Aliquam finibus nulla quam, a iaculis justo finibus non. Suspendisse in fermentum nunc.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-lg-3 col-md-6">
-                    <div class="sidebar-area">
-                        <!-- Breaking News Widget -->
-                        <div class="breaking-news-widget">
-                            <div class="widget-title">
-                                <h5>breaking news</h5>
-                            </div>
-                            <!-- Single Breaking News Widget -->
-                            <div class="single-breaking-news-widget">
-                                <img src="img/blog-img/bn-1.jpg" alt="">
-                                <div class="breakingnews-title">
-                                    <p>breaking news</p>
-                                </div>
-                                <div class="breaking-news-heading gradient-background-overlay">
-                                    <h5 class="font-pt">China leads new global skyscraper record</h5>
-                                </div>
-                            </div>
-                            <!-- Single Breaking News Widget -->
-                            <div class="single-breaking-news-widget">
-                                <img src="img/blog-img/bn-2.jpg" alt="">
-                                <div class="breakingnews-title">
-                                    <p>breaking news</p>
-                                </div>
-                                <div class="breaking-news-heading gradient-background-overlay">
-                                    <h5 class="font-pt">Can a zebra crossing change its stripes?</h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Don't Miss Widget -->
-                        <div class="donnot-miss-widget">
-                            <div class="widget-title">
-                                <h5>Don't miss</h5>
-                            </div>
-                            <!-- Single Don't Miss Post -->
-                            <div class="single-dont-miss-post d-flex mb-30">
-                                <div class="dont-miss-post-thumb">
-                                    <img src="img/blog-img/dm-1.jpg" alt="">
-                                </div>
-                                <div class="dont-miss-post-content">
-                                    <a href="#" class="font-pt">EU council reunites</a>
-                                    <span>Nov 29, 2017</span>
-                                </div>
-                            </div>
-                            <!-- Single Don't Miss Post -->
-                            <div class="single-dont-miss-post d-flex mb-30">
-                                <div class="dont-miss-post-thumb">
-                                    <img src="img/blog-img/dm-2.jpg" alt="">
-                                </div>
-                                <div class="dont-miss-post-content">
-                                    <a href="#" class="font-pt">A new way to travel the world</a>
-                                    <span>March 29, 2016</span>
-                                </div>
-                            </div>
-                            <!-- Single Don't Miss Post -->
-                            <div class="single-dont-miss-post d-flex mb-30">
-                                <div class="dont-miss-post-thumb">
-                                    <img src="img/blog-img/dm-3.jpg" alt="">
-                                </div>
-                                <div class="dont-miss-post-content">
-                                    <a href="#" class="font-pt">Why choose a bank?</a>
-                                    <span>March 29, 2016</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Advert Widget -->
-                        <div class="advert-widget">
-                            <div class="widget-title">
-                                <h5>Advert</h5>
-                            </div>
-                            <div class="advert-thumb mb-30">
-                                <a href="#"><img src="img/bg-img/add.png" alt=""></a>
-                            </div>
-                        </div>
-                        <!-- Subscribe Widget -->
-                        <div class="subscribe-widget">
-                            <div class="widget-title">
-                                <h5>subscribe</h5>
-                            </div>
-                            <div class="subscribe-form">
-                                <form action="#">
-                                    <input type="email" name="email" id="subs_email" placeholder="Your Email">
-                                    <button type="submit">subscribe</button>
-                                </form>
-                            </div>
-                        </div>
+                        <?php 
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                if (isset($_SESSION['userId'])) {
+                                    $output = "location.href=single-post.php?id=".$row["newsId"];
+                                    $url = "single-post.php?id=".$row['newsId'];
+                                } else {
+                                    $output = "alert('Please login first!')";
+                                    $url = "#";
+                                }
+                                if ($row['newsPic']) {
+                                    $pic = $row['newsPic'];
+                                } else {
+                                    $pic = "img/blog-img/2.jpg";
+                                }
+                                $newsId = $row["newsId"];
+                                $sql22 = "SELECT count(distinct commentContent) as count from commentinfo where newsId = "."'$newsId'";
+                                $resultcomment = $mysqli->query($sql22);
+                                $resultrow = $resultcomment->fetch_assoc();
+                                $num = $resultrow["count"];
+                                $str = $row["newsMessage"];
+                                $arrays = explode('</p>',$str);
+                                echo '<div class="gazette-single-todays-post d-md-flex align-items-start mb-50">';
+                                echo '<div class="todays-post-thumb">';
+                                echo '<img src="'.$row['newsPic'].'" alt="">';
+                                echo "</div>";
+                                echo '<div class="todays-post-content">';
+                                echo '<div class="gazette-post-tag">';
+                                echo "<a href='#'>News</a>";
+                                echo "</div>";
+                                echo '<h3><a href="'.$url.'" class="font-pt mb-2">'.$row["newsTitle"].'</a></h3>';
+                                echo ' <span class="gazette-post-date mb-2">'.$row["newsTime"].'</span>';
+                                echo '<a href="'.$url.'" class="post-total-comments">'.$num.' Comments</a>';
+                                echo ''.$arrays[0];
+                                echo '</div>';
+                                echo '</div>';
+                            }
+                        }
+                        else  {
+                            echo "Sorry! there is nothing you searched.";
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -423,105 +293,6 @@
     </section>
     <!-- Catagory Posts Area End -->
 
-
-    <!-- Editorial Area Start -->
-    <section class="gazatte-editorial-area section_padding_100 bg-dark">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="editorial-post-slides owl-carousel">
-                        <!-- Editorial Post Single Slide -->
-                        <div class="editorial-post-single-slide">
-                            <div class="row">
-                                <div class="col-12 col-md-5">
-                                    <div class="editorial-post-thumb">
-                                        <img src="img/blog-img/bitcoin.jpg" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-7">
-                                    <div class="editorial-post-content">
-                                        <!-- Post Tag -->
-                                        <div class="gazette-post-tag">
-                                            <a href="#">Editorial</a>
-                                        </div>
-                                        <h2><a href="#" class="font-pt mb-15">Move over, bitcoin. <br>Here comes litecoin</a></h2>
-                                        <p class="editorial-post-date mb-15">March 29, 2016</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Editorial Post Single Slide -->
-                        <div class="editorial-post-single-slide">
-                            <div class="row">
-                                <div class="col-12 col-md-5">
-                                    <div class="editorial-post-thumb">
-                                        <img src="img/blog-img/bitcoin.jpg" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-7">
-                                    <div class="editorial-post-content">
-                                        <!-- Post Tag -->
-                                        <div class="gazette-post-tag">
-                                            <a href="#">Editorial</a>
-                                        </div>
-                                        <h2><a href="#" class="font-pt mb-15">Move over, bitcoin. <br>Here comes litecoin</a></h2>
-                                        <p class="editorial-post-date mb-15">March 29, 2016</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Editorial Post Single Slide -->
-                        <div class="editorial-post-single-slide">
-                            <div class="row">
-                                <div class="col-12 col-md-5">
-                                    <div class="editorial-post-thumb">
-                                        <img src="img/blog-img/bitcoin.jpg" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-7">
-                                    <div class="editorial-post-content">
-                                        <!-- Post Tag -->
-                                        <div class="gazette-post-tag">
-                                            <a href="#">Editorial</a>
-                                        </div>
-                                        <h2><a href="#" class="font-pt mb-15">Move over, bitcoin. <br>Here comes litecoin</a></h2>
-                                        <p class="editorial-post-date mb-15">March 29, 2016</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Editorial Post Single Slide -->
-                        <div class="editorial-post-single-slide">
-                            <div class="row">
-                                <div class="col-12 col-md-5">
-                                    <div class="editorial-post-thumb">
-                                        <img src="img/blog-img/bitcoin.jpg" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-7">
-                                    <div class="editorial-post-content">
-                                        <!-- Post Tag -->
-                                        <div class="gazette-post-tag">
-                                            <a href="#">Editorial</a>
-                                        </div>
-                                        <h2><a href="#" class="font-pt mb-15">Move over, bitcoin. <br>Here comes litecoin</a></h2>
-                                        <p class="editorial-post-date mb-15">March 29, 2016</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
     <!-- Editorial Area End -->
 
     <!-- Footer Area Start -->
@@ -639,10 +410,7 @@
                 <div class="row h-100 align-items-center justify-content-center">
                     <div class="col-12">
                         <div class="copywrite-text">
-                            <p>
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | by Colorlib- More Templates <a href="http://www.mobancss.com/" target="_blank" title="模板在线">模板在线</a> - Collect from <a href="http://www.mobancss.com/" title="网页模板" target="_blank">网页模板</a>
 
-</p>
                         </div>
                     </div>
                 </div>

@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -231,6 +232,7 @@
   if (!$mysqli) 
   {die("could not connect to the database:n" . $mysqli->connect_error);} 
   $id = $_GET['id'];
+  $_SESSION['newsId'] = $id;
   $sql = "SELECT * FROM newsInfo WHERE newsId = ".$id;
   $selectResult = $mysqli->query($sql);
   if ($selectResult->num_rows > 0) {
@@ -245,9 +247,25 @@
                     <div class="col-12">
                         <div class="single-post-title-content">
                             <!-- Post Tag -->
-                            <div class="gazette-post-tag">
-                                <a href="#"><?php echo ''.$row['tag']?></a>
-                            </div>
+                            <?php
+                              $sqltag = "SELECT DISTINCT tag FROM commentInfo WHERE newsId = ".$id;
+                              $tagResult = $mysqli->query($sqltag);
+                              if ($tagResult->num_rows>0) {
+                               
+                                while ($rowNow = $tagResult->fetch_assoc()) {
+                                    if (!empty($rowNow['tag'])){
+                                        echo '<div class="gazette-post-tag">';
+                                        echo '<a href="#" >'.$rowNow["tag"].'</a>';
+                                        echo ' </div>';
+                                    }
+
+                                }
+                               
+                              }
+                            ?>
+
+                            
+                                
                             <h2 class="font-pt"><?php echo ''.$row['newsTitle']; ?></h2>
                             <p><?php echo ''.$row['newsTime']; ?></p>
                         </div>
@@ -297,7 +315,7 @@
                                         <span class="comment-date font-pt">December 18, 2017</span> -->
                                         <!-- <p> -->
                                             <?php
-                                        $selectSql = "SELECT * FROM commentInfo ";
+                                        $selectSql = "SELECT * FROM commentInfo WHERE newsId = ".$id;
                                         $result = $mysqli->query($selectSql);
                                         if ($result->num_rows > 0) {
                                             // output data of each row
@@ -319,25 +337,6 @@
                                             echo "0 results";
                                           }
                                         ?>
-                                        <!-- </p> -->
-                                        <!-- <a class="reply-btn" href="#">Reply <i class="fa fa-reply" aria-hidden="true"></i></a> -->
-                                    <!-- </div> -->
-                                <!-- </div> -->
-                                <!-- <ol class="children">
-                                    <li class="single_comment_area">
-                                        <div class="comment-wrapper d-md-flex align-items-start">
-                                            <div class="comment-author">
-                                                <img src="img/blog-img/25.jpg" alt="">
-                                            </div>
-                                            <div class="comment-content">
-                                                <h5>John Doe</h5>
-                                                <span class="comment-date text-muted">December 18, 2017</span>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum nunc libero, vitae rutrum nunc porta id. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam arcu augue, semper at elementum nec, cursus nec ante.</p>
-                                                <a class="reply-btn" href="#">Reply <i class="fa fa-reply" aria-hidden="true"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ol> -->
                             </li>
                         </ol>
                     </div>
@@ -350,10 +349,7 @@
                             <!-- Comment Form -->
                             <form action="submit.php">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="contact-name"name = "contactName" placeholder="Enter Your Full Name">
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control" id="contact-email"name = "contactEmail" placeholder="Email">
+                                    <input type="text" class="form-control" id="contact-name"name = "tag" placeholder="Enter Your tag">
                                 </div>
                                 <div class="form-group">
                                     <textarea class="form-control" name="message" id="message" cols="30" name = "message"rows="10" placeholder="Message"></textarea>

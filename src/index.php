@@ -181,7 +181,7 @@
                                         <li class="nav-item dropdown">
                                             <?php 
                                             if (isset($_SESSION["userId"])) {
-                                                $href = "#";
+                                                $href = "profile.php?id=".$_SESSION['userId'];
                                                 $name = ''.$_SESSION["userId"];
                                             } else {
                                                 $href = "signin.html";

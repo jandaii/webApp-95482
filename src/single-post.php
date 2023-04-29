@@ -248,13 +248,13 @@
                         <div class="single-post-title-content">
                             <!-- Post Tag -->
                             <?php
-                              $sqltag = "SELECT DISTINCT tag FROM commentInfo WHERE newsId = ".$id;
+                              $sqltag = "SELECT DISTINCT tagMessage FROM taginfo WHERE newsId = ".$id;
                               $tagResult = $mysqli->query($sqltag);
                               if ($tagResult->num_rows>0) {
                                 while ($rowNow = $tagResult->fetch_assoc()) {
-                                    if (!empty($rowNow['tag'])){
+                                    if (!empty($rowNow['tagMessage'])){
                                         echo '<div class="gazette-post-tag">';
-                                        echo '<a href="#" >'.$rowNow["tag"].'</a>';
+                                        echo '<a href="#" >'.$rowNow["tagMessage"].'</a>';
                                         echo ' </div>';
                                     }
 
@@ -350,12 +350,29 @@
                             </div>
                             <!-- Comment Form -->
                             <form action="submit.php">
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <input type="text" class="form-control" id="contact-name"name = "tag" placeholder="Enter Your tag">
-                                </div>
+                                </div> -->
                                 <div class="form-group">
                                     <textarea class="form-control" name="message" id="message" cols="30" name = "message"rows="10" placeholder="Message"></textarea>
                                 </div>
+                                <button type="submit" class="btn leave-comment-btn">SUBMIT </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="leave-comment-area clearfix">
+                        <div class="comment-form">
+                            <div class="gazette-heading">
+                                <h4 class="font-bold">leave a tag</h4>
+                            </div>
+                            <!-- Comment Form -->
+                            <form action="submittags.php">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="contact-name"name = "tag" placeholder="Enter Your tag">
+                                </div>
+                                <!-- <div class="form-group">
+                                    <textarea class="form-control" name="message" id="message" cols="30" name = "message"rows="10" placeholder="Message"></textarea>
+                                </div> -->
                                 <button type="submit" class="btn leave-comment-btn">SUBMIT </button>
                             </form>
                         </div>

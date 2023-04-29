@@ -179,11 +179,16 @@
                                         </li>
 
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link" href="signin.html"><?php if (isset($_SESSION["userId"])) {
-                                                echo ''.$_SESSION["userId"];
+                                            <?php 
+                                            if (isset($_SESSION["userId"])) {
+                                                $href = "#";
+                                                $name = ''.$_SESSION["userId"];
                                             } else {
-                                                echo 'LOGIN';
-                                            }?></a>
+                                                $href = "signin.html";
+                                                $name = "LOGIN";
+                                            }
+                                            echo '<a class="nav-link" href="'.$href.'">'.$name.'</a';
+                                            ?>
                                         </li>
                                         <li class="nav-item dropdown">
                                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Set</a>

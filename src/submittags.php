@@ -1,14 +1,14 @@
 <?php
 session_start();
 $mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
-$message = $_REQUEST['message'];
+$tag = $_REQUEST['tag'];
 $random = uniqid();
 $mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
 if (!$mysqli) 
 {die("could not connect to the database:n" . $mysqli->connect_error);}
 $userNow = $_SESSION['userId'];
 $newsId = $_SESSION['newsId'];
-$sql = "INSERT INTO commentInfo (commentId,newsId, commentContent, userName)VALUES  ("."'$random'".", "."'$newsId'".","."'$message'".","."'$userNow') ";
+$sql = "INSERT INTO tagInfo (tagId,newsId, tagMessage, userName)VALUES  ("."'$random'".", "."'$newsId'".","."'$tag'".","."'$userNow') ";
 
 if ($mysqli->query($sql) === TRUE) {
     header("Location:single-post.php?id=".$newsId);

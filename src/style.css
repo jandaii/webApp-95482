@@ -85,3 +85,5 @@ body {
 #signup {
     font-size: small;
 }
+.like{ font-size:66px;  color:#ccc; cursor:pointer;}
+.cs{color:#f00;}

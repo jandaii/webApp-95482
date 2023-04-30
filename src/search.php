@@ -1,15 +1,29 @@
 <?php
 session_start();
+// $stopWords = new en();
 $mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
 $search = $_REQUEST['search'];
+//tokens split by white space, symbols and numbers.
+$arraysSearch = explode(' ',$search);
+// get the valuable words
+include "en.php";
+$value = "";
+$delete_array = array_diff($arraysSearch, $data);
+foreach ($delete_array as $arr) {
+    $value.= $arr;
+    $value.= "|";
+}
+$value = substr($value,0,-1);
 $mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
 if (!$mysqli) 
 {die("could not connect to the database:n" . $mysqli->connect_error);}
 
-$sql = "SELECT * FROM newsInfo WHERE newsTitle like "."'%$search%'"." or newsMessage like "."'%$search%'"."";
-$tagSql = "SELECT * FROM tagInfo WHERE tagMessage like "."'%$search%'"."";
+$sql = "SELECT * FROM newsInfo WHERE newsTitle REGEXP '^("."$value".")' or newsMessage REGEXP '^("."$value".")'";
+$tagSql = "SELECT distinct newsId as newsId FROM tagInfo WHERE tagMessage REGEXP '^("."$value".")'";
 $result = $mysqli->query($sql);
-$tagResult = $mysqli->query($tagSql)
+$tagResult = $mysqli->query($tagSql);
+// echo "".$tagResult;
+
   ?><!DOCTYPE html>
 <html lang="en">
 
@@ -243,8 +257,9 @@ $tagResult = $mysqli->query($tagSql)
                             <h4>Related Results</h4>
                         </div>
                         <?php 
-                        if ($tagResult->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
+                        if ($tagResult) {
+                            $newsArray = array();
+                            while ($row = $tagResult->fetch_assoc()) {
                                 if (isset($_SESSION['userId'])) {
                                     $output = "location.href=single-post.php?id=".$row["newsId"];
                                     $url = "single-post.php?id=".$row['newsId'];
@@ -252,35 +267,40 @@ $tagResult = $mysqli->query($tagSql)
                                     $output = "alert('Please login first!')";
                                     $url = "#";
                                 }
-                                if ($row['newsPic']) {
-                                    $pic = $row['newsPic'];
+                                $newsIdnow = $row['newsId'];
+                                $newsArray[] = $newsIdnow;
+                                $sql33 = "SELECT * from newsinfo where newsId = ".$newsIdnow;
+                                $resultnews = $mysqli->query($sql33);
+                                $news = $resultnews->fetch_assoc();
+                                if ($news['newsPic']) {
+                                    $pic = $news['newsPic'];
                                 } else {
                                     $pic = "img/blog-img/2.jpg";
                                 }
-                                $newsId = $row["newsId"];
-                                $sql22 = "SELECT count(distinct commentContent) as count from commentinfo where newsId = "."'$newsId'";
+
+                                $sql22 = "SELECT count(distinct commentContent) as count from commentinfo where newsId = "."'$newsIdnow'";
                                 $resultcomment = $mysqli->query($sql22);
                                 $resultrow = $resultcomment->fetch_assoc();
                                 $num = $resultrow["count"];
-                                $str = $row["newsMessage"];
+                                $str = $news["newsMessage"];
                                 $arrays = explode('</p>',$str);
                                 echo '<div class="gazette-single-todays-post d-md-flex align-items-start mb-50">';
                                 echo '<div class="todays-post-thumb">';
-                                echo '<img src="'.$row['newsPic'].'" alt="">';
+                                echo '<img src="'.$pic.'" alt="">';
                                 echo "</div>";
                                 echo '<div class="todays-post-content">';
                                 echo '<div class="gazette-post-tag">';
                                 echo "<a href='#'>News</a>";
                                 echo "</div>";
-                                echo '<h3><a href="'.$url.'" class="font-pt mb-2">'.$row["newsTitle"].'</a></h3>';
-                                echo ' <span class="gazette-post-date mb-2">'.$row["newsTime"].'</span>';
+                                echo '<h3><a href="'.$url.'" class="font-pt mb-2">'.$news["newsTitle"].'</a></h3>';
+                                echo ' <span class="gazette-post-date mb-2">'.$news["newsTime"].'</span>';
                                 echo '<a href="'.$url.'" class="post-total-comments">'.$num.' Comments</a>';
                                 echo ''.$arrays[0];
                                 echo '</div>';
                                 echo '</div>';
                             }
                         }
-                        if ($result->num_rows > 0) {
+                        if ($result) {
                             while ($row = $result->fetch_assoc()) {
                                 if (isset($_SESSION['userId'])) {
                                     $output = "location.href=single-post.php?id=".$row["newsId"];
@@ -295,6 +315,10 @@ $tagResult = $mysqli->query($tagSql)
                                     $pic = "img/blog-img/2.jpg";
                                 }
                                 $newsId = $row["newsId"];
+                                if (in_array($newsId,$newsArray)) {
+                                    echo "".$newsId;
+                                    continue;
+                                }
                                 $sql22 = "SELECT count(distinct commentContent) as count from commentinfo where newsId = "."'$newsId'";
                                 $resultcomment = $mysqli->query($sql22);
                                 $resultrow = $resultcomment->fetch_assoc();

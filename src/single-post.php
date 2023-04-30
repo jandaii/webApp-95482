@@ -17,6 +17,9 @@
 
     <!-- Core Style CSS -->
     <link rel="stylesheet" href="css/core-style.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+
     <link rel="stylesheet" href="style2.css">
 
     <!-- Responsive CSS -->
@@ -272,9 +275,9 @@
                 </div>
             </div>
         </div>
-
         <div class="single-post-contents">
             <div class="container">
+
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-8">
                         <div class="single-post-text">
@@ -284,11 +287,106 @@
                     <div class="col-12">
                         <div class="single-post-thumb">
                             <?php echo '<img src="'.$row["newsPic"].'" alt="">'; ?>
-                            
                         </div>
-                    </div>
-                   
+                        
                 </div>
+                <style>
+@import url('https://fonts.googleapis.com/css?family=Montserrat:600&display=swap');
+.heart-btn{
+  position: inherit;;
+  /* top: 50%;
+  left: 50%; */
+  transform: translate(-50%,-50%);
+}
+.heartContent{
+  padding: 13px 16px;
+  display: flex;
+  border: 2px solid #eae2e1;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.heartContent.heart-active{
+  border-color: #f9b9c4;
+  background: #fbd0d8;
+}
+.heart{
+  position: absolute;
+  background: url("https://code.5g-o.com/wp-content/uploads/2020/03/img.png") no-repeat;
+  background-position: left;
+  background-size: 2900%;
+  height: 90px;
+  width: 90px;
+  top: 50%;
+  left: 21%;
+  transform: translate(-50%,-50%);
+}
+.text{
+  font-size: 21px;
+  margin-left: 30px;
+  color: grey;
+  font-family: 'Montserrat',sans-serif;
+}
+.numb:before{
+  font-size: 21px;
+  margin-left: 7px;
+  font-weight: 600;
+  color: #9C9496;
+  font-family: sans-serif;
+}
+.numb.heart-active:before{
+  color: #000;
+}
+.text.heart-active{
+  color: #000;
+}
+.heart.heart-active{
+  animation: animate .8s steps(28) 1;
+  background-position: right;
+}
+@keyframes animate {
+  0%{
+    background-position: left;
+  }
+  100%{
+    background-position: right;
+  }
+}
+                   </style> 
+    <?php
+$userId = $_SESSION["userId"];
+$newsId = $_SESSION["newsId"];
+$searchLike = "SELECT * from userlike where newsId = "."'$newsId'"."and userId = "."'$userId'";
+$resultlike = $mysqli->query($searchLike);
+if ($resultlike->num_rows > 0) {
+    $heartclass = "heart heart-active";
+    $contentclass = "heartContent heart-active";
+    $textclass = "text heart-active";
+    $numbclass = "numb heart-active";
+} else {
+    $heartclass = "heart";
+    $contentclass = "heartContent";
+    $textclass = "text";
+    $numbclass = "numb";
+}
+    ?>
+                <div class="heart-btn">
+    <?php echo '<div class="'.$contentclass.'">';?>
+    <?php echo '<span class="'.$heartclass.'"></span>' ?>
+    <?php echo '<span class="'.$textclass.'">Like</span>' ?>
+    <?php echo '<span class="'.$numbclass.'"></span>' ?>
+      </div>
+    </div>
+    <script>
+      $(document).ready(function(){
+        $('.heartContent').click(function(){
+          $('.content').toggleClass("heart-active")
+          $('.text').toggleClass("heart-active")
+          $('.numb').toggleClass("heart-active")
+          $('.heart').toggleClass("heart-active")
+          window.location = "click.php"
+        });
+      });
+    </script>
             </div>
         </div>
     </section>
@@ -511,6 +609,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
     <!-- jQuery (Necessary for All JavaScript Plugins) -->
     <script src="js/jquery/jquery-2.2.4.min.js"></script>
+
     <!-- Popper js -->
     <script src="js/popper.min.js"></script>
     <!-- Bootstrap js -->

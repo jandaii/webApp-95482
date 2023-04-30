@@ -220,30 +220,6 @@
     <!-- Header Area End -->
 
 
-    <!-- Welcome Blog Slide Area End -->
-
-    <!-- Latest News Marquee Area Start -->
-    <div class="latest-news-marquee-area">
-        <div class="simple-marquee-container">
-            <div class="marquee">
-                <ul class="marquee-content-items">
-                    <li>
-                        <a href="#"><span class="latest-news-time">10:40</span> The Facebook Live stream that could presage TV</a>
-                    </li>
-                    <li>
-                        <a href="#"><span class="latest-news-time">11:02</span> Opinion: It's time to start talking about impeachment</a>
-                    </li>
-                    <li>
-                        <a href="#"><span class="latest-news-time">12:37</span> Clinton aims to shore up Wisconsin with new TV ads</a>
-                    </li>
-                    <li>
-                        <a href="#"><span class="latest-news-time">13:59</span> Trump signs tax bill before leaving for Mar-a-Lago</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div><div class="tlinks">Collect from <a href="http://www.mobancss.com/" >网页模板</a></div>
-    <!-- Latest News Marquee Area End -->
 
     <!-- Main Content Area Start -->
     <section class="main-content-wrapper section_padding_100">
@@ -571,10 +547,6 @@
                 <div class="row h-100 align-items-center justify-content-center">
                     <div class="col-12">
                         <div class="copywrite-text">
-                            <p>
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | by Colorlib- More Templates <a href="http://www.mobancss.com/" target="_blank" title="模板在线">模板在线</a> - Collect from <a href="http://www.mobancss.com/" title="网页模板" target="_blank">网页模板</a>
-
-</p>
                         </div>
                     </div>
                 </div>

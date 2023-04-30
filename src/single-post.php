@@ -239,7 +239,7 @@
   $sql = "SELECT * FROM newsInfo WHERE newsId = ".$id;
   $selectResult = $mysqli->query($sql);
   if ($selectResult->num_rows > 0) {
-    $row = $selectResult ->fetch_assoc();
+    $selectRow = $selectResult ->fetch_assoc();
   }
 ?>
     <section class="single-post-area">
@@ -268,8 +268,8 @@
 
                             
                                 
-                            <h2 class="font-pt"><?php echo ''.$row['newsTitle']; ?></h2>
-                            <p><?php echo ''.$row['newsTime']; ?></p>
+                            <h2 class="font-pt"><?php echo ''.$selectRow['newsTitle']; ?></h2>
+                            <p><?php echo ''.$selectRow['newsTime']; ?></p>
                         </div>
                     </div>
                 </div>
@@ -281,12 +281,12 @@
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-8">
                         <div class="single-post-text">
-                            <?php echo ''.$row['newsMessage']; ?>
+                            <?php echo ''.$selectRow['newsMessage']; ?>
                     </div>
                     </div>
                     <div class="col-12">
                         <div class="single-post-thumb">
-                            <?php echo '<img src="'.$row["newsPic"].'" alt="">'; ?>
+                            <?php echo '<img src="'.$selectRow["newsPic"].'" alt="">'; ?>
                         </div>
                         
                 </div>
@@ -402,15 +402,6 @@ if ($resultlike->num_rows > 0) {
                         </div>
 
                         <ol>
-                            <!-- Single Comment Area -->
-                            
-                                
-                                    
-                                    <!-- Comment Content -->
-                                    
-                                        <!-- <h5>John</h5>
-                                        <span class="comment-date font-pt">December 18, 2017</span> -->
-                                        <!-- <p> -->
                                             <?php
                                         $selectSql = "SELECT * FROM commentInfo WHERE newsId = ".$id;
                                         $result = $mysqli->query($selectSql);
@@ -438,6 +429,72 @@ if ($resultlike->num_rows > 0) {
                                           }
                                         ?>
                             </li>
+                        </ol>
+                    </div>
+                    <div class="comment_area section_padding_50 clearfix">
+                        <div class="gazette-heading">
+                            <h4 class="font-bold">Vote for your Opinion</h4>
+                        </div>
+
+                        <ol>
+                            <?php
+                            $dataPoints = array (array("y"=>$selectRow["goodNews"],"label"=>"Endorse"),
+                        array("y"=>$selectRow["badNews"],"label"=>"Oppose")
+                        );
+
+                            ?>
+                            <head>
+<script>
+window.onload = function() {
+ 
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	title:{
+		text: "# of People Endorse this news"
+	},
+	axisY: {
+		title: "# of People",
+		includeZero: true,
+		// prefix: "$",
+		// suffix:  "k"
+	},
+	data: [{
+		type: "bar",
+		yValueFormatString: "#,##0",
+		indexLabel: "{y}",
+		indexLabelPlacement: "inside",
+		indexLabelFontWeight: "bolder",
+		indexLabelFontColor: "white",
+		dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+	}]
+});
+chart.render();
+}
+</script>
+</head>
+<body>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+<form action = "vote.php">
+ <fieldset>
+    <legend>Select a maintenance drone:</legend>
+
+    <div>
+      <input type="radio" id="huey" name="drone" value="huey"
+             checked>
+      <label for="huey">Endorse it!</label>
+    </div>
+
+    <div>
+      <input type="radio" id="dewey" name="drone" value="dewey">
+      <label for="dewey">Oppose it!</label>
+    </div>
+    <input type = 'submit'/>
+</fieldset>
+</form>
+
+
                         </ol>
                     </div>
                     <!-- Leave A Comment -->
@@ -595,10 +652,6 @@ if ($resultlike->num_rows > 0) {
                 <div class="row h-100 align-items-center justify-content-center">
                     <div class="col-12">
                         <div class="copywrite-text">
-                            <p>
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | by Colorlib- More Templates <a href="http://www.mobancss.com/" target="_blank" title="模板在线">模板在线</a> - Collect from <a href="http://www.mobancss.com/" title="网页模板" target="_blank">网页模板</a>
-
-</p>
                         </div>
                     </div>
                 </div>

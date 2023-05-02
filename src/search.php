@@ -94,7 +94,7 @@ $tagResult = $mysqli->query($tagSql);
                                                 $suggestionhref = "suggestion.html";
                                                 $name = "LOGIN";
                                             }
-                                            echo '<a class="nav-link" href="'.$suggestionhref.'">What\' for Me</a';
+                                            echo '<a class="nav-link" href="'.$suggestionhref.'">What\'s for Me</a';
                                             ?>
                                         </li>
 

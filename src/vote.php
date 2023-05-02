@@ -19,7 +19,7 @@ if ($result->num_rows > 0) {
     echo '<script>alert("Your password might be fault")</script>';
   }
   $numNow = $numNow + 1;
-$sqlUpdate = "UPDATE newsinfo set ".$choise." = ".$numNow;
+$sqlUpdate = "UPDATE newsinfo set ".$choise." = ".$numNow." where newsId = ".$id;
 $mysqli->query($sqlUpdate);
 header("Location:single-post.php?id=".$id);
 exit();

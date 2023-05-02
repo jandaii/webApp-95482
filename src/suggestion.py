@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon May  1 22:08:44 2023
-
+Note that this need enough data in userlike.
 @author: Xuezhen Dai
 """
 import difflib
@@ -97,17 +97,18 @@ for key in arraySimilarUser.keys():
                 
 dictSuggestion = {}
 for i in arrayUser:
-
+    if i not in arraySimilarUser:
+        continue
     for m in arraySimilarUser[i]:
         dictSuggestion[i]=[]
         dictSuggestion[i]=dictSuggestion[i]+arrayUserLike[m]
-
 def ranstr(num):
     salt = ''.join(random.sample(string.ascii_letters + string.digits, num))
     return salt
 # get the difference
 for key,value in dictSuggestion.items():
     value = [x for x in value if x not in arrayUserLike[key]]
+    
 # add to the database
 for key,value in dictSuggestion.items():
     count = 0

@@ -21,3 +21,4 @@
 The discription video is in the folder.
 The github link is: https://github.com/jandaii/webApp-95482.git
 
+The database description is: [a link]([https://github.com/user/repo/blob/branch/other_file.md](https://github.com/jandaii/webApp-95482/blob/master/95482_webapp_database_description.pdf))

@@ -10,4 +10,6 @@ if (!$mysqli)
 $sql = "UPDATE userInfo SET DOB  = "."'$dob'".", phoneNum  = "."'$phoneNum'"." WHERE userName = "."'$userId'"."";
 //$sql = "INSERT INTO userinfo VALUES ('username', 'useremail', 'password')";
 $result = $mysqli->query($sql);
+header("Location:personalGoal.php?id=".$userId);
+exit();
 ?>

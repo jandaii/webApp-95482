@@ -1,5 +1,15 @@
-<?php session_start(); ?>
-<!DOCTYPE html>
+<?php
+session_start();
+// $stopWords = new en();
+$mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
+$userid = $_SESSION['userId'];
+$mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
+if (!$mysqli) 
+{die("could not connect to the database:n" . $mysqli->connect_error);}
+
+$sql = "SELECT * FROM newsinfo as a left join suggestionnews as b on a.newsId = b.newsId where b.userId = "."'$userid'"."";
+$result = $mysqli->query($sql);
+  ?><!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -27,7 +37,6 @@
 <body>
     <!-- Header Area Start -->
     <header class="header-area">
-
         <!-- Middle Header Area -->
         <div class="middle-header">
             <div class="container h-100">
@@ -61,35 +70,21 @@
                                             <a class="nav-link" href="index.php">Today <span class="sr-only">(current)</span></a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <?php
-                                            if (isset($_SESSION["userId"])) {
-                                                $suggestionhref = "suggestion.php?id=".$_SESSION['userId'];
-                                                $name = ''.$_SESSION["userId"];
-                                            } else {
-                                                $suggestionhref = "suggestion.html";
-                                                $name = "LOGIN";
-                                            }
-                                            echo '<a class="nav-link" href="'.$suggestionhref.'">What\' for Me</a';
-                                            ?>
-                                        </li>
-
-                                        <li class="nav-item dropdown">
-                                            <?php 
-                                            if (isset($_SESSION["userId"])) {
-                                                $href = "profile.php?id=".$_SESSION['userId'];
-                                                $name = ''.$_SESSION["userId"];
-                                            } else {
-                                                $href = "signin.html";
-                                                $name = "LOGIN";
-                                            }
-                                            echo '<a class="nav-link" href="'.$href.'">'.$name.'</a';
-                                            ?>
-                                        </li>
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Set</a>
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
                                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <a class="dropdown-item" href="signout.php" onclick = "signout.php">Sign out</a>
+                                                <a class="dropdown-item" href="index.html">Home</a>
+                                                <a class="dropdown-item" href="catagory.html">Catagory</a>
+                                                <a class="dropdown-item" href="single-post.html">Single Post</a>
+                                                <a class="dropdown-item" href="about-us.html">About Us</a>
+                                                <a class="dropdown-item" href="contact.html">Contact</a>
                                             </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="signin.html"><?php if (isset($_SESSION["userId"])) {
+                                                echo ''.$_SESSION["userId"];
+                                            } else {
+                                                echo 'LOGIN';
+                                            }?></a>
                                         </li>
                                     </ul>
                                     <!-- Search Form -->
@@ -115,65 +110,21 @@
     <!-- Header Area End -->
 
 
+    <!-- Latest News Marquee Area End -->
 
     <!-- Main Content Area Start -->
     <section class="main-content-wrapper section_padding_100">
         <div class="container">
             <div class="row">
                 <div class="col-12 col-lg-9">
-                    <!-- Gazette Welcome Post -->
-                    <div class="gazette-welcome-post">
-                        <!-- Post Tag -->
-                        
-                        <?php 
-                         $mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
-                         $mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
-                         if (!$mysqli) 
-                         {die("could not connect to the database:n" . $mysqli->connect_error);} 
-                         $selectSql = "SELECT * FROM newsinfo ORDER BY newsTime DESC LIMIT 1 ";
-                         $result = $mysqli->query($selectSql);
-                         if ($result->num_rows > 0) {
-                            $row = $result ->fetch_assoc();
-                            if ($row['newsPic']) {
-                                $pic = $row['newsPic'];
-                            } else {
-                                $pic = "img/blog-img/2.jpg";
-                            }
-                            echo '<div class="gazette-post-tag">';
-                            echo '<a href="#">'.$row["tag"].'</a>';
-                            echo '</div>';
-                            echo '<h2 class = "font-pt">'.$row["newsTitle"].'</h2>';
-                            echo '<p class="gazette-post-date">'.$row['newsTime'].'</p>';
-                            echo '<div class="blog-post-thumbnail my-5">';
-                            echo ' <img src="'.$pic.'" alt="post-thumb">';
-                            echo '</div>';
-                            echo '<div class="post-continue-reading-share d-sm-flex align-items-center justify-content-between mt-30">';
-                            echo '<div class="post-continue-btn">';
-                            if (isset($_SESSION['userId'])) {
-                                $output = "location.href=single-post.php?id=".$row["newsId"];
-                                $url = "single-post.php?id=".$row['newsId'];
-                            } else {
-                                $output = "alert('Please login first!')";
-                                $url = "#";
-                            }
-                            echo '<a href = "'.$url.'" onclick = "'.$output.'" class="font-pt">Continue Reading <i class="fa fa-chevron-right" aria-hidden="true"></i></a>';
-                            echo '</div>';
-                            echo '</div>';
 
-                         }
-                        ?>
-                                
-                            
-                    </div>
 
                     <div class="gazette-todays-post section_padding_100_50">
                         <div class="gazette-heading">
-                            <h4>Popular News</h4>
+                            <h4>Today's suggestion</h4>
                         </div>
                         <?php 
-                        $selectSql = "SELECT * FROM newsinfo ORDER BY newsTime DESC LIMIT 4 ";
-                        $result = $mysqli->query($selectSql);
-                        if ($result->num_rows > 0) {
+                        if ($result) {
                             while ($row = $result->fetch_assoc()) {
                                 if (isset($_SESSION['userId'])) {
                                     $output = "location.href=single-post.php?id=".$row["newsId"];
@@ -188,6 +139,7 @@
                                     $pic = "img/blog-img/2.jpg";
                                 }
                                 $newsId = $row["newsId"];
+                                
                                 $sql22 = "SELECT count(distinct commentContent) as count from commentinfo where newsId = "."'$newsId'";
                                 $resultcomment = $mysqli->query($sql22);
                                 $resultrow = $resultcomment->fetch_assoc();
@@ -196,12 +148,9 @@
                                 $arrays = explode('</p>',$str);
                                 echo '<div class="gazette-single-todays-post d-md-flex align-items-start mb-50">';
                                 echo '<div class="todays-post-thumb">';
-                                echo '<img src="'.$pic.'" alt="">';
+                                echo '<img src="'.$row['newsPic'].'" alt="">';
                                 echo "</div>";
                                 echo '<div class="todays-post-content">';
-                                // echo '<div class="gazette-post-tag">';
-                                // echo "<a href='#'>News</a>";
-                                // echo "</div>";
                                 echo '<h3><a href="'.$url.'" class="font-pt mb-2">'.$row["newsTitle"].'</a></h3>';
                                 echo ' <span class="gazette-post-date mb-2">'.$row["newsTime"].'</span>';
                                 echo '<a href="'.$url.'" class="post-total-comments">'.$num.' Comments</a>';
@@ -211,13 +160,12 @@
                             }
                         }
                         else  {
+                            echo "".$sql;
                             echo "Sorry! there is nothing you searched.";
                         }
                         ?>
                     </div>
                 </div>
-
-
             </div>
         </div>
         <!-- Main Content Area End -->
@@ -226,105 +174,6 @@
     </section>
     <!-- Catagory Posts Area End -->
 
-
-    <!-- Editorial Area Start -->
-    <section class="gazatte-editorial-area section_padding_100 bg-dark">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="editorial-post-slides owl-carousel">
-                        <!-- Editorial Post Single Slide -->
-                        <div class="editorial-post-single-slide">
-                            <div class="row">
-                                <div class="col-12 col-md-5">
-                                    <div class="editorial-post-thumb">
-                                        <img src="img/blog-img/bitcoin.jpg" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-7">
-                                    <div class="editorial-post-content">
-                                        <!-- Post Tag -->
-                                        <div class="gazette-post-tag">
-                                            <a href="#">Editorial</a>
-                                        </div>
-                                        <h2><a href="#" class="font-pt mb-15">Move over, bitcoin. <br>Here comes litecoin</a></h2>
-                                        <p class="editorial-post-date mb-15">March 29, 2016</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Editorial Post Single Slide -->
-                        <div class="editorial-post-single-slide">
-                            <div class="row">
-                                <div class="col-12 col-md-5">
-                                    <div class="editorial-post-thumb">
-                                        <img src="img/blog-img/bitcoin.jpg" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-7">
-                                    <div class="editorial-post-content">
-                                        <!-- Post Tag -->
-                                        <div class="gazette-post-tag">
-                                            <a href="#">Editorial</a>
-                                        </div>
-                                        <h2><a href="#" class="font-pt mb-15">Move over, bitcoin. <br>Here comes litecoin</a></h2>
-                                        <p class="editorial-post-date mb-15">March 29, 2016</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Editorial Post Single Slide -->
-                        <div class="editorial-post-single-slide">
-                            <div class="row">
-                                <div class="col-12 col-md-5">
-                                    <div class="editorial-post-thumb">
-                                        <img src="img/blog-img/bitcoin.jpg" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-7">
-                                    <div class="editorial-post-content">
-                                        <!-- Post Tag -->
-                                        <div class="gazette-post-tag">
-                                            <a href="#">Editorial</a>
-                                        </div>
-                                        <h2><a href="#" class="font-pt mb-15">Move over, bitcoin. <br>Here comes litecoin</a></h2>
-                                        <p class="editorial-post-date mb-15">March 29, 2016</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Editorial Post Single Slide -->
-                        <div class="editorial-post-single-slide">
-                            <div class="row">
-                                <div class="col-12 col-md-5">
-                                    <div class="editorial-post-thumb">
-                                        <img src="img/blog-img/bitcoin.jpg" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-7">
-                                    <div class="editorial-post-content">
-                                        <!-- Post Tag -->
-                                        <div class="gazette-post-tag">
-                                            <a href="#">Editorial</a>
-                                        </div>
-                                        <h2><a href="#" class="font-pt mb-15">Move over, bitcoin. <br>Here comes litecoin</a></h2>
-                                        <p class="editorial-post-date mb-15">March 29, 2016</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
     <!-- Editorial Area End -->
 
     <!-- Footer Area Start -->
@@ -442,6 +291,7 @@
                 <div class="row h-100 align-items-center justify-content-center">
                     <div class="col-12">
                         <div class="copywrite-text">
+
                         </div>
                     </div>
                 </div>

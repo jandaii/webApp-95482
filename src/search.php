@@ -200,24 +200,38 @@ $tagResult = $mysqli->query($tagSql);
                                 <div class="collapse navbar-collapse" id="gazetteMenu">
                                     <ul class="navbar-nav mr-auto">
                                         <li class="nav-item active">
-                                            <a class="nav-link" href="#">Today <span class="sr-only">(current)</span></a>
+                                            <a class="nav-link" href="index.php">Today <span class="sr-only">(current)</span></a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
-                                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <a class="dropdown-item" href="index.html">Home</a>
-                                                <a class="dropdown-item" href="catagory.html">Catagory</a>
-                                                <a class="dropdown-item" href="single-post.html">Single Post</a>
-                                                <a class="dropdown-item" href="about-us.html">About Us</a>
-                                                <a class="dropdown-item" href="contact.html">Contact</a>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="signin.html"><?php if (isset($_SESSION["userId"])) {
-                                                echo ''.$_SESSION["userId"];
+                                            <?php
+                                            if (isset($_SESSION["userId"])) {
+                                                $suggestionhref = "suggestion.php?id=".$_SESSION['userId'];
+                                                $name = ''.$_SESSION["userId"];
                                             } else {
-                                                echo 'LOGIN';
-                                            }?></a>
+                                                $suggestionhref = "suggestion.html";
+                                                $name = "LOGIN";
+                                            }
+                                            echo '<a class="nav-link" href="'.$suggestionhref.'">What\' for Me</a';
+                                            ?>
+                                        </li>
+
+                                        <li class="nav-item dropdown">
+                                            <?php 
+                                            if (isset($_SESSION["userId"])) {
+                                                $href = "profile.php?id=".$_SESSION['userId'];
+                                                $name = ''.$_SESSION["userId"];
+                                            } else {
+                                                $href = "signin.html";
+                                                $name = "LOGIN";
+                                            }
+                                            echo '<a class="nav-link" href="'.$href.'">'.$name.'</a';
+                                            ?>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Set</a>
+                                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <a class="dropdown-item" href="signout.php" onclick = "signout.php">Sign out</a>
+                                            </div>
                                         </li>
                                     </ul>
                                     <!-- Search Form -->

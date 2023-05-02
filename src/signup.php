@@ -14,6 +14,9 @@ if ($mysqli->query($sql) === TRUE) {
     echo "Inserted successfully";
     header("Location:signin.html");
 } else {
-    echo "Error: ".$sql."<br>".$mysqli->error;
+    echo '<script>alert("The account is duplicated");window.location.href=\'signup.html\';</script>';
+
 }
+
+
 ?>

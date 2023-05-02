@@ -825,6 +825,9 @@ img {
     font-size: 18px;
     font-weight: 300;
 }
+.display_inline {
+    display: inline-block;
+}
 
 .post-continue-btn a {
     height: 54px;

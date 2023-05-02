@@ -98,109 +98,79 @@
         </div>
     </header>
     <!-- Header Area End -->
+    <style>
+span{
+    float:left;
+}
+
+</style>
+
+    <div class = "col-12 col-lg-9">
+
+                                        </span>
+<span>
     <?php
-    $mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
-    $mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
-    if (!$mysqli) 
-    {die("could not connect to the database:n" . $mysqli->connect_error);} 
-    $id = $_GET['id'];
-    $selectSql = "SELECT tagMessage, COUNT(distinct tagId) as count FROM taginfo where userName = "."'$id'"."group by tagMessage ";
-    $selectTotal = "SELECT count(distinct tagId) as sum from taginfo where userName = "."'$id'";
-    $totalResult = $mysqli->query($selectTotal);
-    if ($totalResult->num_rows >0) {
-        $totalRow = $totalResult->fetch_assoc();
-        $totalR = $totalRow["sum"];
-    }
-    $tagResult = $mysqli->query($selectSql);
-    $dataPoints = array();
-    if ($tagResult->num_rows > 0) {
-    while ($row = $tagResult->fetch_assoc()) {
-        $dataPoints[] = array("label"=>$row['tagMessage'], "y" =>$row['count'] * 100/$totalR);
-    }
-}
+$userId = $_SESSION["userId"];
     ?>
+    <a href = "addprofile.php?id=">
+        <?php
+        $mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
 
-<?php
-    $selectSql2 = "SELECT tagTime, COUNT(distinct tagId) as count FROM taginfo where userName = "."'$id'"."group by tagTime order by tagTime ";
-    $tagResult2 = $mysqli->query($selectSql2);
-    $dataPoints2 = array();
-    if ($tagResult2->num_rows > 0) {
-    while ($rowNow = $tagResult2->fetch_assoc()) {
-        $dataPoints2[] = array("label"=>$rowNow['tagTime'], "y" =>$rowNow['count']);
-    }
-}
-    $selectSql3 = "SELECT commentTime, COUNT(distinct commentId) as count FROM commentinfo where userName = "."'$id'"."group by commentTime order by commentTime ";
-    $tagResult3 = $mysqli->query($selectSql3);
-    $dataPoints3 = array();
-    if ($tagResult3->num_rows > 0) {
-    while ($rowNow3 = $tagResult3->fetch_assoc()) {
-        $dataPoints3[] = array("label"=>$rowNow3['commentTime'], "y" =>$rowNow3['count']);
-    }
-}
-    ?>
-<head>
-<script>
-window.onload = function() {
-    var chart = new CanvasJS.Chart("chartContainer", {
-	animationEnabled: true,
-	title: {
-		text: "Favorate tags"
-	},
-	subtitles: [{
-		text: ""
-	}],
-	data: [{
-		type: "pie",
-		yValueFormatString: "#,##0.00\"%\"",
-		indexLabel: "{label} ({y})",
-		dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
-	}]
-});
-chart.render();
-var chart2 = new CanvasJS.Chart("chartContainer2", {
-	animationEnabled: true,
-	theme: "light2",
-	title:{
-		text: "Tagging Timeline"
-	},
-	axisY: {
-		title: "Tagging number"
-	},
-	data: [{
-		type: "column",
-		yValueFormatString: "#,##0.## tonnes",
-		dataPoints: <?php echo json_encode($dataPoints2, JSON_NUMERIC_CHECK); ?>
-	}]
-});
-chart2.render();
-var chart3 = new CanvasJS.Chart("chartContainer3", {
-	animationEnabled: true,
-	theme: "light2",
-	title:{
-		text: "Comment Timeline"
-	},
-	axisY: {
-		title: "Comment number"
-	},
-	data: [{
-		type: "column",
-		yValueFormatString: "#,##0.## tonnes",
-		dataPoints: <?php echo json_encode($dataPoints3, JSON_NUMERIC_CHECK); ?>
-	}]
-});
-chart3.render();
-}
-</script>
-</head>
-<body>
-<div id="chartContainer" style="height: 370px; width: 100%;"></div>
-<div id="chartContainer2" style="height: 370px; width: 100%;"></div>
-<div id="chartContainer3" style="height: 370px; width: 100%;"></div>
+        $mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
+        if (!$mysqli) 
+        {die("could not connect to the database:n" . $mysqli->connect_error);}
+        
+        
+        $sql = "SELECT DOB, phoneNum FROM userinfo where userName = "."'$userId'";
+        $result = $mysqli->query($sql);
+        $personalimgnull = "img/badges-img/personal_nocolor.png";
+        $personalimg = "img/badges-img/personal_color.png";
+        if ($result->num_rows > 0) {
+            // output data of each row
+            $row = $result->fetch_assoc();
+            if ($row["DOB"] == null) {
+                echo '<img  src = "'.$personalimgnull.'">';
+            } else if ($row["phoneNum"] == null){
+                echo '<img  src = "'.$personalimgnull.'">';
+            } else {
+                echo '<img  src = "'.$personalimg.'">';
+            }
+            }
+        ?>
+<div>Personal Profile</div>
+                                        </span>
+                                        <span>
+                                        <?php
+        $mysql_conf = array('host'=>'127.0.0.1:3306','db'=>'finalproject','db_user'=>'root','db_pwd'=>'123');
 
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-</body>
+        $mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_conf['db_pwd'],$mysql_conf['db']);
+        if (!$mysqli) 
+        {die("could not connect to the database:n" . $mysqli->connect_error);}
+        
+        $sqlnew = "SELECT count(DISTINCT newsId) as count FROM userlike where userId = "."'$userId'";
+        $resultlike = $mysqli->query($sqlnew);
+        $likeimgnull = "img/badges-img/like_nocolor.png";
+        $likeimg = "img/badges-img/like_color.png";
+        if ($resultlike->num_rows > 0) {
+            // output data of each row
+            $row = $resultlike->fetch_assoc();
+            if ($row["count"] < 2) {
+                
+                echo '<img  src = "'.$likeimgnull.'">';
+            }  else {
+                echo '<img  src = "'.$likeimg.'">';
+            }
+            }
+        ?>
+<div>Like 2 items</div>
+                                        </span>
+                                        <span>
+<a href = "addprofile.php">
+<img  src = "img/badges-img/personal_color.png">
+<div>Register!</div>
+        </span>
 
-
+                                        </div>
 
     <!-- Footer Area Start -->
     <footer class="footer-area bg-img background-overlay" style="background-image: url(img/bg-img/4.jpg);">
@@ -317,10 +287,6 @@ chart3.render();
                 <div class="row h-100 align-items-center justify-content-center">
                     <div class="col-12">
                         <div class="copywrite-text">
-                            <p>
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | by Colorlib- More Templates <a href="http://www.mobancss.com/" target="_blank" title="模板在线">模板在线</a> - Collect from <a href="http://www.mobancss.com/" title="网页模板" target="_blank">网页模板</a>
-
-</p>
                         </div>
                     </div>
                 </div>

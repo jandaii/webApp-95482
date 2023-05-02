@@ -438,8 +438,8 @@ if ($resultlike->num_rows > 0) {
 
                         <ol>
                             <?php
-                            $dataPoints = array (array("y"=>$selectRow["goodNews"],"label"=>"Endorse"),
-                        array("y"=>$selectRow["badNews"],"label"=>"Oppose")
+                            $dataPoints = array (array("y"=>$selectRow["endorse"],"label"=>"Endorse"),
+                        array("y"=>$selectRow["oppose"],"label"=>"Oppose")
                         );
 
                             ?>
@@ -481,14 +481,14 @@ chart.render();
     <legend>Select a maintenance drone:</legend>
 
     <div>
-      <input type="radio" id="huey" name="drone" value="huey"
+      <input type="radio" id="huey" name="choise" value="endorse"
              checked>
-      <label for="huey">Endorse it!</label>
+      <label for="endorse">Endorse it!</label>
     </div>
 
     <div>
-      <input type="radio" id="dewey" name="drone" value="dewey">
-      <label for="dewey">Oppose it!</label>
+      <input type="radio" id="dewey" name="choise" value="oppose">
+      <label for="oppose">Oppose it!</label>
     </div>
     <input type = 'submit'/>
 </fieldset>

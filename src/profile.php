@@ -69,6 +69,9 @@
                                             echo '<a class="nav-link" href="personalGoal.php?id='.$_GET['id'].'">Your Goal <span class="sr-only">(current)</span></a>';
                                             ?>
                                         </li>
+                                        <li class = "nav-item dropdown">
+                                        <a class="nav-link" href="likednews.php">LikedNews <span class="sr-only">(current)</span></a>
+</li>
                                         <li class="nav-item dropdown">
                                             <?php 
                                             if (isset($_SESSION["userId"])) {

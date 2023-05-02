@@ -18,4 +18,6 @@
 - Favorites
 - Suggestion(Recommendation)
 
-The discription video is in the folder
+The discription video is in the folder.
+The github link is: https://github.com/jandaii/webApp-95482.git
+

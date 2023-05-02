@@ -20,6 +20,7 @@ if ($result->num_rows > 0) {
       session_start();
 
       $_SESSION['userId'] = $row['userName'];
+      
       header("Location:index.php");
         exit();    }
   } else {

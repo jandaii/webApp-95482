@@ -7,11 +7,12 @@ $mysqli = mysqli_connect($mysql_conf['host'], $mysql_conf['db_user'], $mysql_con
 if (!$mysqli) 
 {die("could not connect to the database:n" . $mysqli->connect_error);}
 
- $sql = "INSERT INTO userinfo VALUES ("."'$username'".", "."'$useremail'".","."'$password')";
+ $sql = "INSERT INTO userinfo (userName, userEmail, password )VALUES ("."'$username'".", "."'$useremail'".","."'$password')";
 //$sql = "INSERT INTO userinfo VALUES ('username', 'useremail', 'password')";
 
 if ($mysqli->query($sql) === TRUE) {
     echo "Inserted successfully";
+    header("Location:signin.html");
 } else {
     echo "Error: ".$sql."<br>".$mysqli->error;
 }
